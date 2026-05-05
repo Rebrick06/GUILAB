@@ -13,129 +13,122 @@ class RecipeDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 4,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Padding(
-        padding: EdgeInsets.all(AppTheme.paddingMedium),
-        child: Row(
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(16), 
+        color: Colors.white, 
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _leftSection(),
 
-            SizedBox(width: AppTheme.paddingMedium),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    recipe.imagePath,
+                    width: 220,
+                    height: 140,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+
+                const SizedBox(width: 16), 
+
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        recipe.name,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      const SizedBox(height: 8), 
+
+                      Row(
+                        children: [
+                          const Icon(Icons.timer, size: 16),
+                          const SizedBox(width: 4), 
+                          Text("${recipe.time} min"), 
+                          const SizedBox(width: 16), 
+                          Text("${recipe.price} kr"),
+                        ],
+                      ),
+
+                      const SizedBox(height: 8), 
+                      Text(
+                        recipe.description,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+
+            const SizedBox(height: 16), 
 
             Expanded(
-              child: _rightSection(),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Ingredienser",
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ), 
+                        const SizedBox(height: 8), 
+
+                        Expanded(
+                          child: ListView(
+                            children: recipe.ingredients
+                              .map((i) => Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 2),
+                              child: Text(i.toString()),
+                            ))
+                            .toList(),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(width: 24), 
+
+                  Expanded(
+                    flex: 2,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Tillagning", 
+                          style: Theme.of(context).textTheme.titleMedium,
+                        ),
+                        const SizedBox(height: 8), 
+
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Text(recipe.instruction),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           ],
         ),
       ),
     );
+    
   }
-
-  Widget _leftSection() {
-    return SizedBox(
-      width: 240,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _imageWithFlag(),
-
-          SizedBox(height: 12), 
-
-          Text("Ingredienser", style: AppTheme.smallHeading), 
-
-          SizedBox(height: 4), 
-
-          ...recipe.ingredients.map(
-            (i) => Padding(
-              padding: const EdgeInsets.only(bottom: 2.0),
-              child: Text(i.toString()), 
-              )
-          )
-        ],
-      ),
-    );
-  } 
-
-  Widget _rightSection() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 4.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            recipe.name,
-            style: AppTheme.largeHeading,
-          ),
-
-          SizedBox(height: 8),
-
-          _metaRow(), 
-
-          SizedBox(height: 12),
-
-          Text(recipe.description),
-
-          SizedBox(height: 16),
-
-          Text("Tillagning", style: AppTheme.smallHeading),
-
-          SizedBox(height: 4), 
-
-          Text(recipe.instruction), 
-        ],
-      ),
-    );
-  }
-
-  Widget _metaRow() {
-    return Row(
-      children: [
-        Icon(Icons.timer, size: 16),
-        SizedBox(width: 4),
-        Text('${recipe.time} min'),
-        SizedBox(width: 12),
-
-        Icon(Icons.attach_money, size: 16),
-
-        Text('${recipe.price} kr'),
-      ],
-    );
-  }
-
-  Widget _ingredients() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: recipe.ingredients.map((i) => Text(i.toString())).toList(),
-    );
-  }
-
-  Widget _imageWithFlag() {
-    var flag = Cuisine.flag(recipe.cuisine, width: 60); 
-
-    return Stack(
-      children: [
-        SizedBox(
-          width: 240,
-          height: 240,
-          child: FittedBox(
-            fit: BoxFit.cover,
-            child: recipe.image,
-          ),
-        ),
-        if (flag != null)
-          Positioned(
-            bottom: 8,
-            right: 8,
-            child: flag,
-            ),
-      ],
-    );
-
-  }
-
 }
