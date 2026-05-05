@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 
-class logo extends StatelessWidget {
+import 'package:lab2/constants/assets.dart';
+
+class Logo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +25,17 @@ class logo extends StatelessWidget {
                 fontFamily: 'Monoton' 
               ),
             ),
+  
             Transform.rotate(
               angle: -20 * pi / 180, 
+              child:Padding(padding: const EdgeInsets.only(left: 110, top: 30),
               child: Text(
-                'Search', 
+                'Sök', 
                 style: TextStyle(
                   fontFamily: 'Pacifico', 
                   fontSize: 64,
-                  color: Color(0xFFFFAC33)
+                  color: Color(0xFFFFAC33),
+                  ),
                 ),
               ),
             ),
