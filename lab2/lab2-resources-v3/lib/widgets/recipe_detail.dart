@@ -13,17 +13,19 @@ class RecipeDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var uiController = Provider.of<UIController>(context, listen: false);
-
     return Card(
       child: Padding(
         padding: EdgeInsets.all(AppTheme.paddingMedium),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _imageSection(),
+            _leftSection(),
+
             SizedBox(width: AppTheme.paddingMedium),
-            Expanded(child: _contentSection()),
+
+            Expanded(
+              child: _rightSection(),
+            ),
           ],
         ),
       ),
@@ -34,7 +36,12 @@ class RecipeDetail extends StatelessWidget {
     var image = SizedBox(
       width: 240,
       height: 240,
-      child: FittedBox(fit: BoxFit.cover, child: recipe.image),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: FittedBox(
+          fit: BoxFit.cover, 
+          child: recipe.image),
+      ),
     );
     var flag = Cuisine.flag(recipe.cuisine, width: 60);
 
@@ -46,23 +53,41 @@ class RecipeDetail extends StatelessWidget {
     );
   }
 
-  Widget _contentSection() {
+  Widget _leftSection() {
+    return SizedBox(
+      width: 240,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _imageWithFlag(),
+
+          SizedBox(height: 12),
+
+          Text("Ingredienser", style: AppTheme.smallHeading),
+
+          ...recipe.ingredients.map((i) => Text(i.toString())),
+        ],
+      ),
+    );
+  } 
+
+  Widget _rightSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(recipe.name, style: AppTheme.largeHeding),
         SizedBox(height: 8),
         _metaRow(),
-
-        SizedBox(height: 8),
-
+        SizedBox(height: 12),
         Text(recipe.description),
-        SizedBox(height: 16),
-        Text('ingredienser', style: AppTheme.smallHeading),
-        _ingredients(),
+        SizedBox(height: 12),
+        Text("Tillagning", style: AppTheme.smallHeading),
+        Text(recipe.instruction), 
       ],
     );
   }
+
+
 
   Widget _metaRow() {
     return Row(
@@ -85,4 +110,29 @@ class RecipeDetail extends StatelessWidget {
       children: recipe.ingredients.map((i) => Text(i.toString())).toList(),
     );
   }
+
+  Widget _imageWithFlag() {
+    var flag = Cuisine.flag(recipe.cuisine, width: 60); 
+
+    return Stack(
+      children: [
+        SizedBox(
+          width: 240,
+          height: 240,
+          child: FittedBox(
+            fit: BoxFit.cover,
+            child: recipe.image,
+          ),
+        ),
+        if (flag != null)
+          Positioned(
+            bottom: 8,
+            right: 8,
+            child: flag,
+            ),
+      ],
+    );
+
+  }
+
 }
