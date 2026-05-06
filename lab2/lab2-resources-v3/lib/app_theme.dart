@@ -16,7 +16,7 @@ class AppTheme {
     fontWeight: FontWeight.w400,
   );
 
-  static const TextStyle largeHeding = TextStyle(
+  static const TextStyle largeHeading = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.w400,
   );
